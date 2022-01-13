@@ -1,0 +1,22 @@
+{
+  "name": "course_nodejs",
+  "version": "1.0.0",
+  "description": "Course for NodeJS A-Z. Ulbi TV",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "keywords": [
+    "NodeJS",
+    "Ulbi",
+    "TV"
+  ],
+  "author": "ALexAltR <trud.resurs.altay@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^11.0.0",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15"
+  }
+}
