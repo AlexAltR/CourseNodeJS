@@ -1,23 +1,33 @@
-const http = require('http')
-const dotenv = require("dotenv")
+const http = require('http');
+const EventEmitter = require('events');
+const Router = require('./framework/Router') //Импортируем класс Router()
+const Application = require('./framework/Application')//Импортируем класс Application()
+const dotenv = require("dotenv");
 dotenv.config() //-- Импортируем модуль для работы с переменными из окружения
 
 const PORT = process.env.PORT || 5000;
 
-const server = http.createServer((req, res) => {
-    //-- Отправляем данные в формате JSON
-    res.writeHead(200, {
-        'Content-Type': 'application/json'
-    })
-    if(req.url === '/users'){
-        return res.end(JSON.stringify([{
-            id: 2, name: 'Ulbi tv'
-        }]))
-    }
-    if(req.url === '/posts'){
-        return res.end('POSTS')
-    }
-    res.end(req.url)
-});
+const emitter = new EventEmitter();
 
-server.listen(PORT, () => console.log(`Server started on ${PORT}`))
+ //-- Создание фреймворка по типу Express.js
+
+    //-- Создаем класс
+
+    
+// Создаем объект класса Application() 
+const app = new Application();
+app.listen(PORT, () => console.log(`Server started on ${PORT}`))
+
+
+// Создаем объект класса Router() 
+const router = new Router();
+
+router.get('/users', (req, res) => {
+    res.end('YOU SEND REQUEST TO /USERS')
+})
+
+router.get('/posts', (req, res) => {
+    res.end('YOU SEND REQUEST TO /POSTS')
+})
+//Добавляем роутеры в приложение
+app.addRouter(router)
