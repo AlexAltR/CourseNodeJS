@@ -1,13 +1,14 @@
-const http = require('http');
-const EventEmitter = require('events');
-const Router = require('./framework/Router') //Импортируем класс Router()
 const Application = require('./framework/Application')//Импортируем класс Application()
+const userRouter = require('./src/user-router')
+const jsonParser = require('./framework/parseJson')
+const parseUrl = require('./framework/parseUrl')
+const mongoose = require('mongoose')//-- Импортируем mongoose
 const dotenv = require("dotenv");
 dotenv.config() //-- Импортируем модуль для работы с переменными из окружения
 
 const PORT = process.env.PORT || 5000;
 
-const emitter = new EventEmitter();
+
 
  //-- Создание фреймворка по типу Express.js
 
@@ -16,18 +17,24 @@ const emitter = new EventEmitter();
     
 // Создаем объект класса Application() 
 const app = new Application();
-app.listen(PORT, () => console.log(`Server started on ${PORT}`))
 
+app.use(jsonParser)
+app.use(parseUrl('http://localhost:5000'))
 
-// Создаем объект класса Router() 
-const router = new Router();
-
-router.get('/users', (req, res) => {
-    res.end('YOU SEND REQUEST TO /USERS')
-})
-
-router.get('/posts', (req, res) => {
-    res.end('YOU SEND REQUEST TO /POSTS')
-})
 //Добавляем роутеры в приложение
-app.addRouter(router)
+app.addRouter(userRouter)
+
+
+
+
+//-- Создаем функцию для работы с БД mongoDB
+const start = async () => {
+    try {
+        await mongoose.connect('mongodb+srv://user:123@coursenodejs.2hbce.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+        app.listen(PORT, () => console.log(`Server started on ${PORT}`))
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+start()
